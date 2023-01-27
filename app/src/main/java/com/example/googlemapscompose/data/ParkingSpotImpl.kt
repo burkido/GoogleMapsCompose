@@ -1,6 +1,7 @@
 package com.example.googlemapscompose.data
 
 
+import android.util.Log
 import com.example.googlemapscompose.domain.model.ParkingSpot
 import com.example.googlemapscompose.domain.repository.ParkingSpotRepository
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +12,7 @@ class ParkingSpotImpl(
 ): ParkingSpotRepository {
 
     override suspend fun insertParkingSpot(parkingSpot: ParkingSpot) {
+        Log.d("ParkingSpotImpl", "Inserting location: ${parkingSpot.latitude}, ${parkingSpot.longitude}")
         parkingSpotDao.insertParkingSpot(parkingSpot.toParkingSpotEntity())
     }
 

@@ -1,5 +1,6 @@
 package com.example.googlemapscompose.presentation
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
@@ -12,8 +13,11 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
 
 @Composable
 fun MapScreen(
@@ -37,14 +41,29 @@ fun MapScreen(
         }
     ) {
         GoogleMap(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
+            modifier = Modifier.fillMaxSize(),
             properties = viewModel.state.properties,
             uiSettings = uiSettings, // false for prevent overlapping with FAB
-            onMapLongClick = { /*TODO*/ },
-        )
-
+            onMapLongClick = { latLng ->
+                viewModel.onEvent(MapEvent.OnMapLongClick(latLng))
+            },
+        ) {
+            viewModel.state.parkingSpots.forEach { parkingSpot ->
+                Log.d("MapScreen recomposed", "Location: $parkingSpot")
+                Marker(
+                    position = LatLng(parkingSpot.latitude, parkingSpot.longitude),
+                    title = "Parking Spot (${parkingSpot.latitude}, ${parkingSpot.longitude})",
+                    snippet = "Click to remove",
+                    onInfoWindowLongClick = {
+                        viewModel.onEvent(MapEvent.OnParkingSpotClick(parkingSpot))
+                    },
+                    onClick = { marker ->
+                        marker.showInfoWindow()
+                        true
+                    },
+                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
+                )
+            }
+        }
     }
-
 }

@@ -6,7 +6,7 @@ fun ParkingSpotEntity.toParkingSpot(): ParkingSpot {
     return ParkingSpot(
         id = id,
         latitude = latitude,
-        langtitude = lng
+        longitude = lng
     )
 }
 
@@ -14,6 +14,6 @@ fun ParkingSpot.toParkingSpotEntity(): ParkingSpotEntity {
     return ParkingSpotEntity(
         id = id,
         latitude = latitude,
-        lng = langtitude
+        lng = longitude
     )
 }

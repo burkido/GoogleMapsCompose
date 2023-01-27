@@ -1,5 +1,6 @@
 package com.example.googlemapscompose.presentation
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,18 +10,27 @@ import com.example.googlemapscompose.domain.model.ParkingSpot
 import com.example.googlemapscompose.domain.repository.ParkingSpotRepository
 import com.google.android.gms.maps.model.MapStyleOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MapsViewModel @Inject constructor(
-    private val repository: ParkingSpotRepository
-): ViewModel() {
+    private val repository: ParkingSpotRepository,
+) : ViewModel() {
 
     var state by mutableStateOf(MapState())
 
+    init {
+        viewModelScope.launch {
+            repository.getAllParkingSpots().collectLatest { parkingSpots ->
+                state = state.copy(parkingSpots = parkingSpots)
+            }
+        }
+    }
+
     fun onEvent(event: MapEvent) {
-        when(event) {
+        when (event) {
             is MapEvent.ToggleCustomMap -> {
                 state = state.copy(
                     properties = state.properties.copy(
@@ -31,15 +41,20 @@ class MapsViewModel @Inject constructor(
             }
             is MapEvent.OnMapLongClick -> {
                 viewModelScope.launch {
+                    Log.d("MapsViewModel", "clicked location: ${event.latLng.latitude}, ${event.latLng.longitude}")
                     repository.insertParkingSpot(
                         ParkingSpot(
                             latitude = event.latLng.latitude,
-                            longitude = event.latLng.latitude
+                            longitude = event.latLng.longitude
                         )
                     )
                 }
             }
-            is MapEvent.OnParkingSpotClick -> TODO()
+            is MapEvent.OnParkingSpotClick -> {
+                viewModelScope.launch {
+                    repository.deleteParkingSpot(event.parkingSpot)
+                }
+            }
         }
     }
 }
