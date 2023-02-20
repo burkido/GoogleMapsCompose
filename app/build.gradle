@@ -72,6 +72,9 @@ dependencies {
     // Google Maps
     implementation "com.google.android.gms:play-services-maps:18.0.2"
 
+    //  Location Services
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+
     //Dagger - Hilt
     implementation "com.google.dagger:hilt-android:2.40.5"
     kapt "com.google.dagger:hilt-android-compiler:2.40.5"
@@ -85,4 +88,6 @@ dependencies {
 
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.4.1"
+
+
 }

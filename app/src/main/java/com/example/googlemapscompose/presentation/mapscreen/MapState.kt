@@ -1,4 +1,4 @@
-package com.example.googlemapscompose.presentation
+package com.example.googlemapscompose.presentation.mapscreen
 
 import com.example.googlemapscompose.domain.model.ParkingSpot
 import com.google.maps.android.compose.MapProperties

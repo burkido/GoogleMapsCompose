@@ -1,4 +1,4 @@
-package com.example.googlemapscompose.presentation
+package com.example.googlemapscompose.mapasset
 
 object MapStyleGTAV {
 

@@ -1,4 +1,4 @@
-package com.example.googlemapscompose.presentation
+package com.example.googlemapscompose.presentation.mapscreen
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.googlemapscompose.domain.model.ParkingSpot
 import com.example.googlemapscompose.domain.repository.ParkingSpotRepository
+import com.example.googlemapscompose.mapasset.MapStyleGTAV
 import com.google.android.gms.maps.model.MapStyleOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest

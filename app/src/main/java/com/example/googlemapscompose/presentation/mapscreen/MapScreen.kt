@@ -1,8 +1,7 @@
-package com.example.googlemapscompose.presentation
+package com.example.googlemapscompose.presentation.mapscreen
 
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -11,6 +10,7 @@ import androidx.compose.material.icons.filled.ToggleOff
 import androidx.compose.material.icons.filled.ToggleOn
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -40,6 +40,13 @@ fun MapScreen(
             }
         }
     ) {
+
+
+
+
+        LaunchedEffect(key1 = , )
+        
+        
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             properties = viewModel.state.properties,
@@ -64,6 +71,8 @@ fun MapScreen(
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
                 )
             }
+
+
         }
     }
 }
