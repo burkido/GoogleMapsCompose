@@ -7,12 +7,13 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import com.example.googlemapscompose.R
+import androidx.lifecycle.LiveData
 import com.example.googlemapscompose.data.LocationClientImpl
 import com.example.googlemapscompose.domain.repository.LocationClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -23,6 +24,10 @@ class LocationService : Service() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient
+
+//    init {
+//        val locationList
+//    }
 
     @Inject
     lateinit var notification: NotificationCompat.Builder
@@ -39,17 +44,21 @@ class LocationService : Service() {
 
         locationClient = LocationClientImpl(
             context = applicationContext,
-            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(applicationContext)
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(
+                applicationContext
+            )
         )
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when(intent?.action) {
+        when (intent?.action) {
             ACTION_START_LOCATION_SERVICE -> {
                 start()
                 createNotificationChannel()
             }
-            ACTION_STOP_LOCATION_SERVICE -> { stop() }
+            ACTION_STOP_LOCATION_SERVICE -> {
+                stop()
+            }
         }
 
 
@@ -57,7 +66,7 @@ class LocationService : Service() {
     }
 
     private fun createNotificationChannel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "location",
                 "Location",
@@ -83,6 +92,7 @@ class LocationService : Service() {
             .onEach { location ->
                 val lat = location.latitude.toString().takeLast(3)
                 val long = location.longitude.toString().takeLast(3)
+                //latitude.postValue(location.latitude)
                 val updatedNotification = notification.setContentText(
                     "Location: ($lat, $long)"
                 )

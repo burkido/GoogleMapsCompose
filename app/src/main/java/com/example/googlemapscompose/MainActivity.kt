@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
+import com.example.googlemapscompose.presentation.mapscreen.MapScreen
 import com.example.googlemapscompose.service.LocationService
 import com.example.googlemapscompose.ui.theme.GoogleMapsComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,28 +32,28 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             GoogleMapsComposeTheme {
-                //MapScreen()
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Button(
-                        onClick = {
-                            Intent(applicationContext, LocationService::class.java).apply {
-                                action = LocationService.ACTION_START_LOCATION_SERVICE
-                                startService(this)
-                            }
-                        }) {
-                        Text(text = "Start")
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        onClick = {
-                            Intent(applicationContext, LocationService::class.java).apply {
-                                action = LocationService.ACTION_STOP_LOCATION_SERVICE
-                                startService(this)
-                            }
-                        }) {
-                        Text(text = "Stop")
-                    }
-                }
+                MapScreen()
+//                Column(modifier = Modifier.fillMaxSize()) {
+//                    Button(
+//                        onClick = {
+//                            Intent(applicationContext, LocationService::class.java).apply {
+//                                action = LocationService.ACTION_START_LOCATION_SERVICE
+//                                startService(this)
+//                            }
+//                        }) {
+//                        Text(text = "Start")
+//                    }
+//                    Spacer(modifier = Modifier.height(16.dp))
+//                    Button(
+//                        onClick = {
+//                            Intent(applicationContext, LocationService::class.java).apply {
+//                                action = LocationService.ACTION_STOP_LOCATION_SERVICE
+//                                startService(this)
+//                            }
+//                        }) {
+//                        Text(text = "Stop")
+//                    }
+//                }
             }
         }
     }

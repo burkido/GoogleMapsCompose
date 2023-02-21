@@ -10,12 +10,13 @@ import androidx.compose.material.icons.filled.ToggleOff
 import androidx.compose.material.icons.filled.ToggleOn
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 
@@ -24,16 +25,17 @@ fun MapScreen(
     viewModel: MapsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
-    val uiSettings = remember {
-        MapUiSettings(zoomControlsEnabled = false)
-    }
+    val uiSettings = remember { MapUiSettings(zoomControlsEnabled = false) }
+    val mapProperties = remember { mutableStateOf(MapProperties(isMyLocationEnabled = true)) }
+
+
 
     Scaffold(
         scaffoldState = scaffoldState,
         floatingActionButton = {
             FloatingActionButton(onClick = { viewModel.onEvent(MapEvent.ToggleCustomMap) }) {
                 Icon(
-                    imageVector = if (viewModel.state.isCustomMap)
+                    imageVector = if (viewModel.uiState.isCustomMap)
                         Icons.Default.ToggleOff else Icons.Default.ToggleOn,
                     contentDescription = "Toggle Custom View"
                 )
@@ -42,20 +44,16 @@ fun MapScreen(
     ) {
 
 
-
-
         //LaunchedEffect(key1 = , )
-        
-        
+
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
-            properties = viewModel.state.properties,
+            properties = viewModel.uiState.properties,
             uiSettings = uiSettings, // false for prevent overlapping with FAB
-            onMapLongClick = { latLng ->
-                viewModel.onEvent(MapEvent.OnMapLongClick(latLng))
-            },
+            onMapLongClick = { latLng -> viewModel.onEvent(MapEvent.OnMapLongClick(latLng)) },
+
         ) {
-            viewModel.state.parkingSpots.forEach { parkingSpot ->
+            viewModel.uiState.parkingSpots.forEach { parkingSpot ->
                 Log.d("MapScreen recomposed", "Location: $parkingSpot")
                 Marker(
                     position = LatLng(parkingSpot.latitude, parkingSpot.longitude),
