@@ -44,7 +44,7 @@ fun MapScreen(
 
 
 
-        LaunchedEffect(key1 = , )
+        //LaunchedEffect(key1 = , )
         
         
         GoogleMap(

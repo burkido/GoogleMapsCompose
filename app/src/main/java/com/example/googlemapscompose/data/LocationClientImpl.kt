@@ -23,7 +23,7 @@ class LocationClientImpl(
 ) : LocationClient {
 
     @SuppressLint("MissingPermission")
-    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getLocationUpdates(interval: Long): Flow<Location> {
         return callbackFlow {
             if (!context.hasLocationPermission()) {
