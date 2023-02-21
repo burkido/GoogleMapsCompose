@@ -25,6 +25,9 @@ class LocationService : Service() {
     private lateinit var locationClient: LocationClient
 
     @Inject
+    lateinit var notification: NotificationCompat.Builder
+
+    @Inject
     lateinit var notificationManager: NotificationManager
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -66,11 +69,11 @@ class LocationService : Service() {
     }
 
     private fun start() {
-        val notification = NotificationCompat.Builder(this, "location")
-            .setContentTitle("Tracking location...")
-            .setContentText("Location:")
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setOngoing(true)
+//        val notification = NotificationCompat.Builder(this, "location")
+//            .setContentTitle("Tracking location...")
+//            .setContentText("Location:")
+//            .setSmallIcon(R.drawable.ic_launcher_background)
+//            .setOngoing(true)
 
         //val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
