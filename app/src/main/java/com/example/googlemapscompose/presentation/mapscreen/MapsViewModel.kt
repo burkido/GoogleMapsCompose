@@ -40,20 +40,12 @@ class MapsViewModel @Inject constructor(
 //
     init {
         viewModelScope.launch {
-            val locationFlow = locationClient.getLocationUpdates(2000)
+
             val parkingFlow = parkingSpotRepository.getAllParkingSpots()
 
             parkingFlow.collect { parkingSpots ->
-                Log.d("MapsViewModel", "parkingSpots: $parkingSpots")
+                Log.d("MapsViewModel", "parkingSpots2: $parkingSpots")
                 uiState = uiState.copy(parkingSpots = parkingSpots)
-            }
-
-            locationFlow.collect { location ->
-                Log.d("MapsViewModel", "locationsss: ${location.latitude}, ${location.longitude}")
-                locationState = locationState.copy(
-                    latitude = location.latitude.toFloat(),
-                    longitude = location.longitude.toFloat()
-                )
             }
         }
     }
@@ -85,6 +77,21 @@ class MapsViewModel @Inject constructor(
             is MapEvent.OnParkingSpotClick -> {
                 viewModelScope.launch {
                     parkingSpotRepository.deleteParkingSpot(event.parkingSpot)
+                }
+            }
+            MapEvent.OnMyLocationButtonClick -> {
+                viewModelScope.launch {
+                    locationClient.getLocationUpdates(2000L)
+                        .collect { location ->
+                            Log.d(
+                                "MapsViewModel",
+                                "location: ${location.latitude}, ${location.longitude}"
+                            )
+                            locationState = locationState.copy(
+                                latitude = location.latitude,
+                                longitude = location.longitude
+                            )
+                        }
                 }
             }
         }
