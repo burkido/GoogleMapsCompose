@@ -33,27 +33,27 @@ class MainActivity : ComponentActivity() {
         setContent {
             GoogleMapsComposeTheme {
                 MapScreen()
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Button(
-                        onClick = {
-                            Intent(applicationContext, LocationService::class.java).apply {
-                                action = LocationService.ACTION_START_LOCATION_SERVICE
-                                startService(this)
-                            }
-                        }) {
-                        Text(text = "Start")
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        onClick = {
-                            Intent(applicationContext, LocationService::class.java).apply {
-                                action = LocationService.ACTION_STOP_LOCATION_SERVICE
-                                startService(this)
-                            }
-                        }) {
-                        Text(text = "Stop")
-                    }
-                }
+//                Column(modifier = Modifier.fillMaxSize()) {
+//                    Button(
+//                        onClick = {
+//                            Intent(applicationContext, LocationService::class.java).apply {
+//                                action = LocationService.ACTION_START_LOCATION_SERVICE
+//                                startService(this)
+//                            }
+//                        }) {
+//                        Text(text = "Start")
+//                    }
+//                    Spacer(modifier = Modifier.height(16.dp))
+//                    Button(
+//                        onClick = {
+//                            Intent(applicationContext, LocationService::class.java).apply {
+//                                action = LocationService.ACTION_STOP_LOCATION_SERVICE
+//                                startService(this)
+//                            }
+//                        }) {
+//                        Text(text = "Stop")
+//                    }
+//                }
             }
         }
     }

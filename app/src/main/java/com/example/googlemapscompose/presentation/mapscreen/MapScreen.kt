@@ -26,8 +26,8 @@ fun MapScreen(
     viewModel: MapsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
-    val uiSettings = remember { MapUiSettings(zoomControlsEnabled = false) }
-    val cameraPositionState = rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(LatLng(1.35, 103.87),11f) }
+    val uiSettings = remember { MapUiSettings(zoomControlsEnabled = true) }
+    val cameraPositionState = rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(LatLng(33.8160897, -117.9225226),20f) }
 
 
     LaunchedEffect(viewModel.locationState.latitude) {

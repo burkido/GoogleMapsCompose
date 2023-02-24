@@ -11,6 +11,6 @@ interface GoogleMapsApi {
         @Query("origin") origin: String,
         @Query("destination") destination: String,
         @Query("key") key: String
-    ): List<DirectionsDto>
+    ): DirectionsDto
 
 }

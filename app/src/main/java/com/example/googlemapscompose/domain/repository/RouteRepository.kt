@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface RouteRepository {
 
-    fun getRoute(origin: String, destination: String): Flow<Resource<List<Directions>>>
+    fun getRoute(origin: String, destination: String): Flow<Resource<Directions>>
 }

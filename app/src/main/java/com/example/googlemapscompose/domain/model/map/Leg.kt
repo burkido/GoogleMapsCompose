@@ -6,5 +6,5 @@ import com.example.googlemapscompose.data.remote.dto.DurationDto
 data class Leg(
     val distance: DistanceDto,
     val duration: DurationDto,
-    val steps: List<Step>,
+    val steps: List<Step>?,
 )
