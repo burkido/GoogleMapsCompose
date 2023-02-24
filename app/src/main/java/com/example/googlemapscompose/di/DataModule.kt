@@ -14,13 +14,6 @@ abstract class DataModule {
     @Binds
     abstract fun bindLocationClient(locationClientImpl: LocationClientImpl): LocationClient
 
-//    @Binds
-//    abstract fun bindLocationClient(
-//        locationClientImpl: LocationClientImpl(
-//            applicationContext,
-//            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(
-//                applicationContext
-//            )),
-//    ): LocationClient
+
 
 }

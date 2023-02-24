@@ -1,6 +1,6 @@
 package com.example.googlemapscompose.data.remote
 
-data class StartLocation(
+data class EndLocationDto(
     val lat: Double,
     val lng: Double
 )

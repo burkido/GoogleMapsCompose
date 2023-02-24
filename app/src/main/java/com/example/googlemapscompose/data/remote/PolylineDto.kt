@@ -1,5 +1,5 @@
 package com.example.googlemapscompose.data.remote
 
-data class OverviewPolyline(
+data class PolylineDto(
     val points: String
 )
