@@ -4,7 +4,11 @@ package com.example.googlemapscompose.data
 import android.util.Log
 import com.example.googlemapscompose.domain.model.ParkingSpot
 import com.example.googlemapscompose.domain.repository.ParkingSpotRepository
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Polygon
+import com.google.android.gms.maps.model.Polyline
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class ParkingSpotImpl(
@@ -12,7 +16,10 @@ class ParkingSpotImpl(
 ): ParkingSpotRepository {
 
     override suspend fun insertParkingSpot(parkingSpot: ParkingSpot) {
-        Log.d("ParkingSpotImpl", "Inserting location: ${parkingSpot.latitude}, ${parkingSpot.longitude}")
+        Log.d(
+            "ParkingSpotImpl",
+            "Inserting location: ${parkingSpot.latitude}, ${parkingSpot.longitude}"
+        )
         parkingSpotDao.insertParkingSpot(parkingSpot.toParkingSpotEntity())
     }
 
@@ -25,4 +32,13 @@ class ParkingSpotImpl(
             parkingSpots.map { it.toParkingSpot() }
         }
     }
+
+    override fun getSamplePolyline(): Flow<List<LatLng>> = flow {
+
+    }
+
+    override fun getSamplePolygon(): Flow<List<Polygon>> = flow {
+
+    }
+
 }

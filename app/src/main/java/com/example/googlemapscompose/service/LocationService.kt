@@ -53,8 +53,8 @@ class LocationService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START_LOCATION_SERVICE -> {
-                start()
                 createNotificationChannel()
+                start()
             }
             ACTION_STOP_LOCATION_SERVICE -> {
                 stop()
