@@ -1,4 +1,4 @@
-package com.example.googlemapscompose.data.remote
+package com.example.googlemapscompose.data.remote.dto
 
 import com.example.googlemapscompose.domain.model.map.Route
 

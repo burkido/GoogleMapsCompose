@@ -7,13 +7,11 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.LiveData
-import com.example.googlemapscompose.data.LocationClientImpl
+import com.example.googlemapscompose.data.repository.LocationClientImpl
 import com.example.googlemapscompose.domain.repository.LocationClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

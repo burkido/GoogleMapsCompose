@@ -1,11 +1,10 @@
 package com.example.googlemapscompose.di
 
 import android.app.Application
-import android.app.NotificationManager
 import android.content.Context
 import androidx.room.Room
-import com.example.googlemapscompose.data.ParkingSpotDatabase
-import com.example.googlemapscompose.data.ParkingSpotImpl
+import com.example.googlemapscompose.data.local.ParkingSpotDatabase
+import com.example.googlemapscompose.data.repository.ParkingSpotImpl
 import com.example.googlemapscompose.domain.repository.ParkingSpotRepository
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -13,7 +12,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ServiceScoped
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 

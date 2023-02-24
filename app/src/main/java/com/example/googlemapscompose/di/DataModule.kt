@@ -1,6 +1,6 @@
 package com.example.googlemapscompose.di
 
-import com.example.googlemapscompose.data.LocationClientImpl
+import com.example.googlemapscompose.data.repository.LocationClientImpl
 import com.example.googlemapscompose.domain.repository.LocationClient
 import dagger.Binds
 import dagger.Module

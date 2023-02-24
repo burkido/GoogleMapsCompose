@@ -1,4 +1,4 @@
-package com.example.googlemapscompose.data.remote
+package com.example.googlemapscompose.data.remote.dto
 
 data class GeocodedWaypointDto(
     val geocoder_status: String,

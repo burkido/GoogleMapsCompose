@@ -1,4 +1,4 @@
-package com.example.googlemapscompose.data
+package com.example.googlemapscompose.data.repository
 
 import android.annotation.SuppressLint
 import android.content.Context

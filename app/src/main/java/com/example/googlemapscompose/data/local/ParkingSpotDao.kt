@@ -1,6 +1,7 @@
-package com.example.googlemapscompose.data
+package com.example.googlemapscompose.data.local
 
 import androidx.room.*
+import com.example.googlemapscompose.data.local.entity.ParkingSpotEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
