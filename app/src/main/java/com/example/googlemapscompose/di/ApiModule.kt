@@ -1,5 +1,6 @@
 package com.example.googlemapscompose.di
 
+import com.example.googlemapscompose.data.remote.GoogleMapsApi
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -35,9 +36,15 @@ object ApiModule {
 
     @Singleton
     @Provides
+    fun provideGson(): Gson {
+        return Gson()
+    }
+
+    @Singleton
+    @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
-        gson: Gson
+        gson: Gson,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com/maps/api/")
@@ -46,4 +53,11 @@ object ApiModule {
             .build()
     }
 
+    @Singleton
+    @Provides
+    fun provideGoogleMapsApi(retrofit: Retrofit): GoogleMapsApi {
+        return retrofit.create(GoogleMapsApi::class.java)
+    }
+
 }
+

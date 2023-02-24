@@ -1,22 +1,20 @@
 package com.example.googlemapscompose.presentation.mapscreen
 
-import android.content.Intent
 import android.util.Log
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ToggleOff
 import androidx.compose.material.icons.filled.ToggleOn
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.example.googlemapscompose.service.LocationService
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -51,7 +49,6 @@ fun MapScreen(
         }
     ) {
 
-
         val context = LocalContext.current
 
         GoogleMap(
@@ -66,7 +63,6 @@ fun MapScreen(
 //                    action = LocationService.ACTION_STOP_LOCATION_SERVICE
 //                    context.startService(this)
 //                }
-
                 true
             },
             cameraPositionState = cameraPositionState
@@ -88,7 +84,30 @@ fun MapScreen(
                 )
             }
 
-
+        }
+        Row {
+            MapButton(
+                text = "Reset map",
+                onClick = { viewModel.onEvent(MapEvent.OnResetMap) },
+                modifier = Modifier.testTag("reset_map_button")
+            )
+            MapButton(text = "Draw route", onClick = { viewModel.onEvent(MapEvent.OnClickDirection) })
         }
     }
+}
+
+@Composable
+fun MapButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        modifier = modifier.padding(4.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary, contentColor = MaterialTheme.colors.onPrimary),
+        onClick = { onClick() }
+    ) {
+        Text(text = text, style = MaterialTheme.typography.body1)
+    }
+
 }

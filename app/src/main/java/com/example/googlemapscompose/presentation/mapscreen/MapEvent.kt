@@ -7,6 +7,7 @@ sealed class MapEvent {
     object ToggleCustomMap: MapEvent()
     data class OnMapLongClick(val latLng: LatLng): MapEvent()
     data class OnParkingSpotClick(val parkingSpot: ParkingSpot): MapEvent()
-
     object OnMyLocationButtonClick: MapEvent()
+    object OnResetMap: MapEvent()
+    object OnClickDirection: MapEvent()
 }

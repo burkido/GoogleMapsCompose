@@ -9,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.googlemapscompose.domain.model.ParkingSpot
 import com.example.googlemapscompose.domain.repository.LocationClient
 import com.example.googlemapscompose.domain.repository.ParkingSpotRepository
+import com.example.googlemapscompose.domain.repository.RouteRepository
 import com.example.googlemapscompose.mapasset.MapStyleGTAV
+import com.example.googlemapscompose.util.Resource
 import com.google.android.gms.maps.model.MapStyleOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MapsViewModel @Inject constructor(
     private val parkingSpotRepository: ParkingSpotRepository,
+    private val routeRepository: RouteRepository,
     private val locationClient: LocationClient,
 ) : ViewModel() {
 
@@ -92,6 +95,33 @@ class MapsViewModel @Inject constructor(
                                 longitude = location.longitude
                             )
                         }
+                }
+            }
+            MapEvent.OnResetMap -> {
+                viewModelScope.launch {
+                    uiState = uiState.copy(
+                        direction = emptyList(),
+                    )
+                }
+            }
+            MapEvent.OnClickDirection -> {
+                viewModelScope.launch {
+                    /*val direction = */routeRepository.getRoute(
+                        origin = "Disneyland",
+                        destination = "Universal+Studios+Hollywood",
+                    ).collect { directions ->
+                        Log.d("MapsViewModel", "directions inn line: $directions")
+                        when(directions) {
+                            is Resource.Error -> Log.d("MapsViewModel", "error in line: ${directions.message}")
+                            is Resource.Loading -> Log.d("MapsViewModel", "loading in line")
+                            is Resource.Success -> Log.d("MapsViewModel", "success in line: ${directions.data}")
+                        }
+                    }
+
+
+//                    uiState = uiState.copy(
+//                        direction = direction
+//                    )
                 }
             }
         }
