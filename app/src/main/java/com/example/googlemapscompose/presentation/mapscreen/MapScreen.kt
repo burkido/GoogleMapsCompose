@@ -17,11 +17,9 @@ import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.JointType
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.*
 import timber.log.Timber
 
 @Composable
@@ -30,7 +28,9 @@ fun MapScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val uiSettings = remember { MapUiSettings(zoomControlsEnabled = true) }
-    val cameraPositionState = rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(LatLng(33.8160897, -117.9225226),20f) }
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(LatLng(33.8160897, -117.9225226), 20f)
+    }
 
 
     LaunchedEffect(viewModel.locationState.latitude) {
@@ -73,10 +73,10 @@ fun MapScreen(
 //                }
                 true
             },
-            cameraPositionState = cameraPositionState
+            cameraPositionState = cameraPositionState,
         ) {
             viewModel.uiState.parkingSpots.forEach { parkingSpot ->
-                Timber.tag("MapScreen recomposed").d("Location: " + parkingSpot)
+                Timber.tag("MapScreen recomposed").d("Location: %s", parkingSpot)
                 Marker(
                     position = LatLng(parkingSpot.latitude, parkingSpot.longitude),
                     title = "Parking Spot (${parkingSpot.latitude}, ${parkingSpot.longitude})",
@@ -90,6 +90,12 @@ fun MapScreen(
                     },
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
                 )
+
+                Timber.d("Alooo")
+
+               val polylines = viewModel.uiState.polylines
+                Polyline(points = polylines, color = MaterialTheme.colors.primary, width = 5f)
+
             }
 
         }
@@ -99,7 +105,9 @@ fun MapScreen(
                 onClick = { viewModel.onEvent(MapEvent.OnResetMap) },
                 modifier = Modifier.testTag("reset_map_button")
             )
-            MapButton(text = "Draw route", onClick = { viewModel.onEvent(MapEvent.OnClickDirection) })
+            MapButton(
+                text = "Draw route",
+                onClick = { viewModel.onEvent(MapEvent.OnClickDirection) })
         }
     }
 }
@@ -108,11 +116,14 @@ fun MapScreen(
 fun MapButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Button(
         modifier = modifier.padding(4.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary, contentColor = MaterialTheme.colors.onPrimary),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.onPrimary
+        ),
         onClick = { onClick() }
     ) {
         Text(text = text, style = MaterialTheme.typography.body1)

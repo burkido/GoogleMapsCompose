@@ -7,5 +7,7 @@ interface LocationClient {
 
     fun getLocationUpdates(interval: Long): Flow<Location>
 
+    fun getCurrentLocation(onSuccess: (Location) -> Unit, onError: (Exception) -> Unit): Unit
+
     class LocationException(message: String): Exception(message)
 }

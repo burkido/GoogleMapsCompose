@@ -47,7 +47,7 @@ class MapsViewModel @Inject constructor(
             val parkingFlow = parkingSpotRepository.getAllParkingSpots()
 
             parkingFlow.collect { parkingSpots ->
-                Timber.d("parkingSpots2: " + parkingSpots)
+                Timber.d("parkingSpots: " + parkingSpots)
                 uiState = uiState.copy(parkingSpots = parkingSpots)
             }
         }
@@ -81,14 +81,18 @@ class MapsViewModel @Inject constructor(
             }
             MapEvent.OnMyLocationButtonClick -> {
                 viewModelScope.launch {
-                    locationClient.getLocationUpdates(2000L)
-                        .collect { location ->
-                            Timber.d("location: " + location.latitude + ", " + location.longitude)
+                    locationClient.getCurrentLocation(
+                        onSuccess = { location ->
+                            Timber.d("current location: " + location.latitude + ", " + location.longitude)
                             locationState = locationState.copy(
                                 latitude = location.latitude,
                                 longitude = location.longitude
                             )
+                        },
+                        onError = { e ->
+                            Timber.d("error: " + e.message)
                         }
+                    )
                 }
             }
             MapEvent.OnResetMap -> {
