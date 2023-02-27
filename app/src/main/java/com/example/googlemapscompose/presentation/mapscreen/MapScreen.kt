@@ -1,6 +1,5 @@
 package com.example.googlemapscompose.presentation.mapscreen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,7 +18,11 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.*
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberCameraPositionState
+import timber.log.Timber
 
 @Composable
 fun MapScreen(
@@ -31,8 +34,13 @@ fun MapScreen(
 
 
     LaunchedEffect(viewModel.locationState.latitude) {
-        Log.d("MapScreen", "Location changed: ${viewModel.locationState.latitude}, ${viewModel.locationState.longitude}")
-        val cameraPosition = CameraPosition.fromLatLngZoom(LatLng(viewModel.locationState.latitude, viewModel.locationState.longitude), 16f)
+        Timber.d("Location changed: " + viewModel.locationState.latitude + ", " + viewModel.locationState.longitude)
+        val cameraPosition = CameraPosition.fromLatLngZoom(
+            LatLng(
+                viewModel.locationState.latitude,
+                viewModel.locationState.longitude
+            ), 16f
+        )
         cameraPositionState.animate(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
@@ -57,7 +65,7 @@ fun MapScreen(
             uiSettings = uiSettings, // false for prevent overlapping with FAB
             onMapLongClick = { latLng -> viewModel.onEvent(MapEvent.OnMapLongClick(latLng)) },
             onMyLocationButtonClick = {
-                Log.d("MapScreen", "MyLocationButton clicked")
+                Timber.d("MyLocationButton clicked")
                 viewModel.onEvent(MapEvent.OnMyLocationButtonClick)
 //                Intent(context, LocationService::class.java).apply {
 //                    action = LocationService.ACTION_STOP_LOCATION_SERVICE
@@ -68,7 +76,7 @@ fun MapScreen(
             cameraPositionState = cameraPositionState
         ) {
             viewModel.uiState.parkingSpots.forEach { parkingSpot ->
-                Log.d("MapScreen recomposed", "Location: $parkingSpot")
+                Timber.tag("MapScreen recomposed").d("Location: " + parkingSpot)
                 Marker(
                     position = LatLng(parkingSpot.latitude, parkingSpot.longitude),
                     title = "Parking Spot (${parkingSpot.latitude}, ${parkingSpot.longitude})",

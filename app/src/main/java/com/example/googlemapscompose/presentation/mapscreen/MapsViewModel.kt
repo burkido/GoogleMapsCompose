@@ -1,6 +1,5 @@
 package com.example.googlemapscompose.presentation.mapscreen
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,8 +13,9 @@ import com.example.googlemapscompose.mapasset.MapStyleGTAV
 import com.example.googlemapscompose.util.Resource
 import com.google.android.gms.maps.model.MapStyleOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -47,7 +47,7 @@ class MapsViewModel @Inject constructor(
             val parkingFlow = parkingSpotRepository.getAllParkingSpots()
 
             parkingFlow.collect { parkingSpots ->
-                Log.d("MapsViewModel", "parkingSpots2: $parkingSpots")
+                Timber.d("parkingSpots2: " + parkingSpots)
                 uiState = uiState.copy(parkingSpots = parkingSpots)
             }
         }
@@ -65,10 +65,7 @@ class MapsViewModel @Inject constructor(
             }
             is MapEvent.OnMapLongClick -> {
                 viewModelScope.launch {
-                    Log.d(
-                        "MapsViewModel",
-                        "clicked location: ${event.latLng.latitude}, ${event.latLng.longitude}"
-                    )
+                    Timber.d("clicked location: " + event.latLng.latitude + ", " + event.latLng.longitude)
                     parkingSpotRepository.insertParkingSpot(
                         ParkingSpot(
                             latitude = event.latLng.latitude,
@@ -86,10 +83,7 @@ class MapsViewModel @Inject constructor(
                 viewModelScope.launch {
                     locationClient.getLocationUpdates(2000L)
                         .collect { location ->
-                            Log.d(
-                                "MapsViewModel",
-                                "location: ${location.latitude}, ${location.longitude}"
-                            )
+                            Timber.d("location: " + location.latitude + ", " + location.longitude)
                             locationState = locationState.copy(
                                 latitude = location.latitude,
                                 longitude = location.longitude
@@ -107,18 +101,16 @@ class MapsViewModel @Inject constructor(
             MapEvent.OnClickDirection -> {
                 viewModelScope.launch {
                     /*val direction = */routeRepository.getRoute(
-                        origin = "Disneyland",
-                        destination = "Universal+Studios+Hollywood",
-                    ).collect { directions ->
-                        Log.d("MapsViewModel", "directions inn line: $directions")
-                        when(directions) {
-                            is Resource.Error -> Log.d("MapsViewModel", "error in line: ${directions.message}")
-                            is Resource.Loading -> Log.d("MapsViewModel", "loading in line")
-                            is Resource.Success -> Log.d("MapsViewModel", "success in line: ${directions.data}")
-                        }
+                    origin = "Disneyland",
+                    destination = "Universal+Studios+Hollywood",
+                ).collect { directions ->
+                    Timber.d("directions in line: $directions")
+                    when (directions) {
+                        is Resource.Error -> Timber.d("error in line: " + directions.message)
+                        is Resource.Loading -> Timber.d("loading in line")
+                        is Resource.Success -> Timber.d("success in line: " + directions.data)
                     }
-
-
+                }
 //                    uiState = uiState.copy(
 //                        direction = direction
 //                    )

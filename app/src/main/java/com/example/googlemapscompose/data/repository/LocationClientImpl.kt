@@ -5,19 +5,16 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import android.os.Looper
-import android.util.Log
 import com.example.googlemapscompose.domain.repository.LocationClient
 import com.example.googlemapscompose.util.hasLocationPermission
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.Priority
+import com.google.android.gms.location.*
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class LocationClientImpl @Inject constructor(
@@ -30,23 +27,26 @@ class LocationClientImpl @Inject constructor(
     override fun getLocationUpdates(interval: Long): Flow<Location> {
         return callbackFlow {
 
-            Log.d("LocationClientImpl", "Getting location updates")
+            Timber.d("Getting location updates")
 
             if (!context.hasLocationPermission()) {
                 throw LocationClient.LocationException("Location permission not granted")
             }
 
-            val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val locationManager =
+                context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-            if(!isGpsEnabled && !isNetworkEnabled) {
+            val isNetworkEnabled =
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+            if (!isGpsEnabled && !isNetworkEnabled) {
                 throw LocationClient.LocationException("You need to enable GPS or Network provider")
             }
 
-            val locationRequest = com.google.android.gms.location.LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, interval).apply {
-                setMaxUpdateAgeMillis(interval)
-                setIntervalMillis(interval)
-            }.build()
+            val locationRequest =
+                LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, interval).apply {
+                    setMaxUpdateAgeMillis(interval)
+                    setIntervalMillis(interval)
+                }.build()
 
             val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult) {
