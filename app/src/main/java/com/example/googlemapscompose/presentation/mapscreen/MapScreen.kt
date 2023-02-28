@@ -7,18 +7,14 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ToggleOff
 import androidx.compose.material.icons.filled.ToggleOn
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.JointType
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
 import timber.log.Timber
 
@@ -31,6 +27,8 @@ fun MapScreen(
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(33.8160897, -117.9225226), 20f)
     }
+
+    Timber.d("Inside Map Screen")
 
 
     LaunchedEffect(viewModel.locationState.latitude) {
@@ -59,6 +57,8 @@ fun MapScreen(
 
         val context = LocalContext.current
 
+        val uiState = viewModel.uiState
+
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             properties = viewModel.uiState.properties,
@@ -74,8 +74,13 @@ fun MapScreen(
                 true
             },
             cameraPositionState = cameraPositionState,
+
+
         ) {
-            viewModel.uiState.parkingSpots.forEach { parkingSpot ->
+
+            Timber.d("Inside Google Map")
+
+            uiState.parkingSpots.forEach { parkingSpot ->
                 Timber.tag("MapScreen recomposed").d("Location: %s", parkingSpot)
                 Marker(
                     position = LatLng(parkingSpot.latitude, parkingSpot.longitude),
@@ -90,13 +95,13 @@ fun MapScreen(
                     },
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
                 )
-
-                Timber.d("Alooo")
-
-               val polylines = viewModel.uiState.polylines
-                Polyline(points = polylines, color = MaterialTheme.colors.primary, width = 5f)
-
             }
+
+            DrawPolylines(
+                polylines = uiState.polylines,
+                jointType = JointType.ROUND,
+                width = 5f
+            )
 
         }
         Row {
@@ -110,6 +115,19 @@ fun MapScreen(
                 onClick = { viewModel.onEvent(MapEvent.OnClickDirection) })
         }
     }
+}
+
+@Composable
+fun DrawPolylines(polylines: List<LatLng>, jointType: Int, width: Float) {
+
+    Timber.d("Inside Draw Polylines")
+
+    Polyline(
+        points = polylines,
+        jointType = jointType,
+        color = Color(Color.Green.hashCode()),
+        width = width,
+    )
 }
 
 @Composable

@@ -3,6 +3,8 @@ package com.example.googlemapscompose.presentation.mapscreen
 import com.example.googlemapscompose.domain.model.ParkingSpot
 import com.example.googlemapscompose.domain.model.map.Directions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Polyline
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.compose.MapProperties
 
 /*
