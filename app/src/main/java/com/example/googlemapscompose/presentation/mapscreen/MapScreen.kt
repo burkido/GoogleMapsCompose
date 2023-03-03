@@ -101,7 +101,7 @@ fun MapScreen(
             DrawPolylines(
                 polylines = uiState.polylines,
                 jointType = JointType.ROUND,
-                width = 5f
+                width = 10f
             )
 
         }
@@ -126,7 +126,7 @@ fun DrawPolylines(polylines: List<LatLng>, jointType: Int, width: Float) {
     Polyline(
         points = polylines,
         jointType = jointType,
-        color = Color(Color.Green.hashCode()),
+        color = Color(Color.Black.hashCode()),
         width = width,
     )
 }

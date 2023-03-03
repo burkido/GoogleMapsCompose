@@ -117,32 +117,35 @@ class MapsViewModel @Inject constructor(
                             is Resource.Success -> {
                                 uiState = uiState.copy(
                                     loading = false,
-                                    polylines = listOf(
-                                        LatLng(33.81607,-117.92253),
-                                        LatLng(33.81593,-117.92262),
-                                        LatLng(33.81586,-117.92268),
-                                        LatLng(33.81586,-117.92268),
-                                        LatLng(33.81577,-117.92277),
-                                        LatLng(33.81573,-117.92283),
-                                        LatLng(33.81569,-117.92290),
-                                        LatLng(33.81564,-117.92299),
-                                        LatLng(33.81562,-117.92308),
-                                        LatLng(33.81560,-117.92315),
-                                        LatLng(33.81559,-117.92323),
-                                        LatLng(33.81559,-117.92330),
-                                        LatLng(33.81559,-117.92336),
-                                        LatLng(33.81558,-117.92359),
-                                        LatLng(33.81558,-117.92384),
-                                        LatLng(33.81558,-117.92406),
-                                    ),
                                 )
-//                                val steps = direction.data?.routes?.get(0)?.legs?.get(0)?.steps
-//                                steps?.forEach {
-//                                    Timber.d("stepske: " + it.polyline)
-//                                }
-//
-//                                val routes = steps?.get(0)?.polyline
-//                                Timber.d("routes: " + routes)
+                                val steps = direction.data?.routes?.get(0)?.legs?.get(0)?.steps
+                                steps?.forEach {
+                                    Timber.d("stepske: " + it.polyline)
+                                }
+
+                                val routes = steps?.get(0)?.polyline
+                                Timber.d("routes: $routes")
+
+                                val decodedPathOfOne = polylineUtilities.decode(steps?.get(0)!!.polyline)
+                                decodedPathOfOne.forEach { latLng ->
+                                    Timber.d("latLng: " + latLng.latitude + ", " + latLng.longitude)
+                                }
+
+                                var decodedPath = emptyList<LatLng>()
+
+                                steps.forEach { step ->
+                                    val currentDecodedPath = polylineUtilities.decode(step.polyline)
+                                    currentDecodedPath.forEach {
+                                        decodedPath = decodedPath.plus(
+                                            element = LatLng(it.latitude, it.longitude)
+                                        )
+                                    }
+
+                                    uiState = uiState.copy(
+                                        polylines = decodedPath
+                                    )
+
+                                }
 
                             }
                             is Resource.Error -> {
