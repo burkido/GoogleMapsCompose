@@ -5,12 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.googlemapscompose.domain.business.PolylineUtilities
 import com.example.googlemapscompose.domain.model.ParkingSpot
 import com.example.googlemapscompose.domain.repository.LocationClient
 import com.example.googlemapscompose.domain.repository.ParkingSpotRepository
 import com.example.googlemapscompose.domain.repository.RouteRepository
 import com.example.googlemapscompose.mapasset.MapStyleGTAV
 import com.example.googlemapscompose.util.Resource
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -24,6 +26,7 @@ class MapsViewModel @Inject constructor(
     private val parkingSpotRepository: ParkingSpotRepository,
     private val routeRepository: RouteRepository,
     private val locationClient: LocationClient,
+    private val polylineUtilities: PolylineUtilities,
 ) : ViewModel() {
 
     var uiState by mutableStateOf(MapState())
@@ -47,7 +50,7 @@ class MapsViewModel @Inject constructor(
             val parkingFlow = parkingSpotRepository.getAllParkingSpots()
 
             parkingFlow.collect { parkingSpots ->
-                Timber.d("parkingSpots: " + parkingSpots)
+                Timber.d("parkingSpots: $parkingSpots")
                 uiState = uiState.copy(parkingSpots = parkingSpots)
             }
         }
@@ -102,22 +105,57 @@ class MapsViewModel @Inject constructor(
                     )
                 }
             }
-            MapEvent.OnClickDirection -> {
+            MapEvent.OnClickDrawRoute -> {
                 viewModelScope.launch {
-                    /*val direction = */routeRepository.getRoute(
-                    origin = "Disneyland",
-                    destination = "Universal+Studios+Hollywood",
-                ).collect { directions ->
-                    Timber.d("directions in line: $directions")
-                    when (directions) {
-                        is Resource.Error -> Timber.d("error in line: " + directions.message)
-                        is Resource.Loading -> Timber.d("loading in line")
-                        is Resource.Success -> Timber.d("success in line: " + directions.data)
+                    val (origin, destination) = "Disneyland" to "Universal+Studios+Hollywood"
+                    routeRepository.getRoute(
+                        origin = origin,
+                        destination = destination
+                    ).collect { direction ->
+                        Timber.d("direction: $direction")
+                        when (direction) {
+                            is Resource.Success -> {
+                                uiState = uiState.copy(
+                                    loading = false,
+                                    polylines = listOf(
+                                        LatLng(33.81607,-117.92253),
+                                        LatLng(33.81593,-117.92262),
+                                        LatLng(33.81586,-117.92268),
+                                        LatLng(33.81586,-117.92268),
+                                        LatLng(33.81577,-117.92277),
+                                        LatLng(33.81573,-117.92283),
+                                        LatLng(33.81569,-117.92290),
+                                        LatLng(33.81564,-117.92299),
+                                        LatLng(33.81562,-117.92308),
+                                        LatLng(33.81560,-117.92315),
+                                        LatLng(33.81559,-117.92323),
+                                        LatLng(33.81559,-117.92330),
+                                        LatLng(33.81559,-117.92336),
+                                        LatLng(33.81558,-117.92359),
+                                        LatLng(33.81558,-117.92384),
+                                        LatLng(33.81558,-117.92406),
+                                    ),
+                                )
+//                                val steps = direction.data?.routes?.get(0)?.legs?.get(0)?.steps
+//                                steps?.forEach {
+//                                    Timber.d("stepske: " + it.polyline)
+//                                }
+//
+//                                val routes = steps?.get(0)?.polyline
+//                                Timber.d("routes: " + routes)
+
+                            }
+                            is Resource.Error -> {
+                                uiState = uiState.copy(loading = true)
+                                Timber.d("stepske error: " + direction.message)
+                            }
+                            is Resource.Loading -> {
+                                Timber.d("stepske loading")
+                                uiState = uiState.copy(loading = true)
+                            }
+                        }
                     }
-                }
-//                    uiState = uiState.copy(
-//                        direction = direction
-//                    )
+
                 }
             }
         }

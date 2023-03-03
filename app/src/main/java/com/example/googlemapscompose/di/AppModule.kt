@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.googlemapscompose.data.local.ParkingSpotDatabase
 import com.example.googlemapscompose.data.repository.ParkingSpotImpl
+import com.example.googlemapscompose.domain.business.PolylineUtilities
 import com.example.googlemapscompose.domain.repository.ParkingSpotRepository
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -39,6 +40,12 @@ object AppModule {
     @Provides
     fun provideFuseLocationProviderClient(@ApplicationContext context: Context): FusedLocationProviderClient {
         return LocationServices.getFusedLocationProviderClient(context)
+    }
+
+    @Singleton
+    @Provides
+    fun providePolylineUtilities(): PolylineUtilities {
+        return PolylineUtilities()
     }
 
 }

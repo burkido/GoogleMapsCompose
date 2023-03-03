@@ -9,5 +9,5 @@ sealed class MapEvent {
     data class OnParkingSpotClick(val parkingSpot: ParkingSpot): MapEvent()
     object OnMyLocationButtonClick: MapEvent()
     object OnResetMap: MapEvent()
-    object OnClickDirection: MapEvent()
+    object OnClickDrawRoute: MapEvent()
 }

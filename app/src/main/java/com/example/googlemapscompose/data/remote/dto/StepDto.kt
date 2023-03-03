@@ -16,7 +16,8 @@ data class StepDto(
     fun toStep(): Step {
         return Step(
             startLocation = startLocation,
-            endLocation = endLocation
+            endLocation = endLocation,
+            polyline = polyline.points
         )
     }
 }

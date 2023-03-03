@@ -6,4 +6,5 @@ import com.example.googlemapscompose.data.remote.dto.StartLocationDto
 data class Step(
     val startLocation: StartLocationDto?,
     val endLocation: EndLocationDto?,
+    val polyline: String,
 )

@@ -1,5 +1,6 @@
 package com.example.googlemapscompose.presentation.mapscreen
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.example.googlemapscompose.service.LocationService
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
@@ -23,7 +25,7 @@ fun MapScreen(
     viewModel: MapsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
-    val uiSettings = remember { MapUiSettings(zoomControlsEnabled = true) }
+    val uiSettings = remember { MapUiSettings(zoomControlsEnabled = true, ) }
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(33.8160897, -117.9225226), 20f)
     }
@@ -67,14 +69,13 @@ fun MapScreen(
             onMyLocationButtonClick = {
                 Timber.d("MyLocationButton clicked")
                 viewModel.onEvent(MapEvent.OnMyLocationButtonClick)
-//                Intent(context, LocationService::class.java).apply {
-//                    action = LocationService.ACTION_STOP_LOCATION_SERVICE
-//                    context.startService(this)
-//                }
+                Intent(context, LocationService::class.java).apply {
+                    action = LocationService.ACTION_STOP_LOCATION_SERVICE
+                    context.startService(this)
+                }
                 true
             },
             cameraPositionState = cameraPositionState,
-
 
         ) {
 
@@ -112,7 +113,7 @@ fun MapScreen(
             )
             MapButton(
                 text = "Draw route",
-                onClick = { viewModel.onEvent(MapEvent.OnClickDirection) })
+                onClick = { viewModel.onEvent(MapEvent.OnClickDrawRoute) })
         }
     }
 }

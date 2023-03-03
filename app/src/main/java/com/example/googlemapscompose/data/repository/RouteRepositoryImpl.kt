@@ -1,6 +1,7 @@
 package com.example.googlemapscompose.data.repository
 
 import com.example.googlemapscompose.data.remote.GoogleMapsApi
+import com.example.googlemapscompose.domain.business.PolylineUtilities
 import com.example.googlemapscompose.domain.model.map.Directions
 import com.example.googlemapscompose.domain.repository.RouteRepository
 import com.example.googlemapscompose.util.Resource
@@ -12,7 +13,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class RouteRepositoryImpl @Inject constructor(
-    private val googleMapsApi: GoogleMapsApi
+    private val googleMapsApi: GoogleMapsApi,
+    private val polylineUtilities: PolylineUtilities
 ): RouteRepository {
 
     override fun getRoute(origin: String, destination: String): Flow<Resource<Directions>> = flow {
