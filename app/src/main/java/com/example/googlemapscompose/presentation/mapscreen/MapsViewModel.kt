@@ -101,13 +101,14 @@ class MapsViewModel @Inject constructor(
             MapEvent.OnResetMap -> {
                 viewModelScope.launch {
                     uiState = uiState.copy(
-                        direction = emptyList(),
+                        polylines = emptyList(),
                     )
                 }
             }
             MapEvent.OnClickDrawRoute -> {
                 viewModelScope.launch {
-                    val (origin, destination) = "Disneyland" to "Universal+Studios+Hollywood"
+                    //val (origin, destination) = "Disneyland" to "Universal+Studios+Hollywood"
+                    val (origin, destination) = "Çanakkale Vahit Tuna Anadolu Lisesi" to "Çanakkale Kordon"
                     routeRepository.getRoute(
                         origin = origin,
                         destination = destination

@@ -25,7 +25,7 @@ fun MapScreen(
     viewModel: MapsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
-    val uiSettings = remember { MapUiSettings(zoomControlsEnabled = true, ) }
+    val uiSettings = remember { MapUiSettings(zoomControlsEnabled = true) }
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(33.8160897, -117.9225226), 20f)
     }
@@ -77,7 +77,7 @@ fun MapScreen(
             },
             cameraPositionState = cameraPositionState,
 
-        ) {
+            ) {
 
             Timber.d("Inside Google Map")
 
@@ -98,13 +98,20 @@ fun MapScreen(
                 )
             }
 
+
+
             DrawPolylines(
                 polylines = uiState.polylines,
                 jointType = JointType.ROUND,
                 width = 10f
             )
-
         }
+
+        ControlMapButtons(
+            onResetMap = { viewModel.onEvent(MapEvent.OnResetMap) },
+            onDrawRoute = { viewModel.onEvent(MapEvent.OnClickDrawRoute) }
+        )
+
         Row {
             MapButton(
                 text = "Reset map",
@@ -115,6 +122,24 @@ fun MapScreen(
                 text = "Draw route",
                 onClick = { viewModel.onEvent(MapEvent.OnClickDrawRoute) })
         }
+    }
+}
+
+@Composable
+fun ControlMapButtons(
+    onResetMap: () -> Unit,
+    onDrawRoute: () -> Unit,
+) {
+    Row {
+        MapButton(
+            text = "Reset map",
+            onClick = onResetMap,
+            modifier = Modifier.testTag("reset_map_button")
+        )
+        MapButton(
+            text = "Draw route",
+            onClick = onDrawRoute
+        )
     }
 }
 
