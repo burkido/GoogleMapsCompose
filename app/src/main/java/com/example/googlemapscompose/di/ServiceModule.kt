@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.core.app.NotificationCompat
 import com.example.googlemapscompose.MainActivity
 import dagger.Module
@@ -18,6 +19,7 @@ import dagger.hilt.android.scopes.ServiceScoped
 @InstallIn(ServiceComponent::class)
 object ServiceModule {
 
+    @ExperimentalMaterialApi
     @ServiceScoped
     @Provides
     fun providePendingIntent(

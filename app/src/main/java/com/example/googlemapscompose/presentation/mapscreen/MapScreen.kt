@@ -1,19 +1,26 @@
 package com.example.googlemapscompose.presentation.mapscreen
 
 import android.content.Intent
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.sharp.DeleteOutline
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.googlemapscompose.R
 import com.example.googlemapscompose.service.LocationService
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
@@ -55,17 +62,7 @@ fun MapScreen(
     BottomSheetScaffold(
         scaffoldState = bottomSheetState,
         sheetPeekHeight = 0.dp,
-        sheetContent = {
-            Row(
-                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .aspectRatio(1f)
-                    .padding(16.dp)
-                    .testTag("BottomSheet")
-            ) {
-
-            }
-        }
+        sheetContent = { CarParkBottomSheetContent() },
     ) {
         Scaffold(
             scaffoldState = scaffoldState,
@@ -163,6 +160,91 @@ fun MapScreen(
     }
 }
 
+@ExperimentalMaterialApi
+@Composable
+fun CarParkBottomSheetContent() {
+
+    Text(
+        text = "Car Parks",
+        modifier = Modifier.padding(8.dp),
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+        color = Color.Black
+    )
+    Card(
+        onClick = { /*TODO*/ },
+        modifier = Modifier
+            .size(width = 360.dp, height = 200.dp)
+            .padding(16.dp),
+        elevation = 8.dp,
+        shape = RoundedCornerShape(8.dp),
+        backgroundColor = Color.White,
+        onClickLabel = "Car Park Bottom Sheet Content",
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column {
+                Text(
+                    text = "Maslak Otopark",
+                    modifier = Modifier.padding(8.dp),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = Color.Black
+                )
+                Divider(
+                    color = Color.Black,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(8.dp)
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center) {
+                    CarParkShortInfo(
+                        iconId = R.drawable.baseline_access_time_24,
+                        firstDetailHeader = "Açık Saatler",
+                        firstDetailDesc = "09:00 - 23:00",
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    CarParkShortInfo(
+                        iconId = R.drawable.baseline_access_time_24,
+                        firstDetailHeader = "Uygun Araç Sayısı",
+                        firstDetailDesc = "14 uygun araç",
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CarParkShortInfo(
+    @DrawableRes iconId: Int,
+    firstDetailHeader: String = "Açık Saatler",
+    firstDetailDesc: String = "09:00 - 23:00",
+) {
+    Row {
+        Image(
+            painter = painterResource(id = R.drawable.baseline_access_time_24),
+            contentDescription = "Icon",
+            modifier = Modifier.size(24.dp)
+        )
+        Column {
+            Text(
+                text = firstDetailHeader,
+                fontWeight = FontWeight.Light,
+                fontSize = 14.sp,
+                color = Color.Black,
+            )
+            Text(
+                text = firstDetailDesc,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = Color.Black
+            )
+        }
+    }
+}
+
+
 @Composable
 fun ControlMapButtons(
     onResetMap: () -> Unit,
@@ -220,4 +302,18 @@ fun MapButton(
         Text(text = text, style = MaterialTheme.typography.body1)
     }
 
+}
+
+//@ExperimentalMaterialApi
+//@Preview
+//@Composable
+//fun MapScreenPreview() {
+//    MapScreen()
+//}
+
+@ExperimentalMaterialApi
+@Preview
+@Composable
+fun CarParkBottomSheetContentPreview() {
+    CarParkBottomSheetContent()
 }
